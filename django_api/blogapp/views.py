@@ -59,7 +59,7 @@ def update_blog(request,pk):
   return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 
 def delete_blog(request,pk):
