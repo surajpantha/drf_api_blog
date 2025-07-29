@@ -7,6 +7,8 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Blog
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -67,3 +69,11 @@ def delete_blog(request,pk):
   blog=get_object_or_404(Blog,id=pk,author=user)
   blog.delete()
   return Response({'message:blog deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+
+def create_admin_user(request):
+    User = get_user_model()
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "adminpassword")
+        return JsonResponse({"message": "Superuser created"})
+    return JsonResponse({"message": "Superuser already exists"})
