@@ -9,7 +9,6 @@ from .models import Blog
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-
 # Create your views here.
 
 @api_view(['POST'])
