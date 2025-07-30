@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser,Blog
+from django.contrib.auth import get_user_model
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,3 +44,16 @@ class BlogSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    author_posts = serializers.SerializerMethodField()
+    class Meta:
+        model = get_user_model()
+        fields = ["id", "username", "email", "first_name", "last_name", "job_title", "bio", "profile_picture", "author_posts"]
+
+    
+    def get_author_posts(self, user):
+        blogs = Blog.objects.filter(author=user)[:9]
+        serializer = BlogSerializer(blogs, many=True)
+        return serializer.data

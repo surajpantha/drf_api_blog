@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .serializers import UserRegistrationSerializer,BlogSerializer,UpdateUserProfileSerializer
+from .serializers import UserRegistrationSerializer,BlogSerializer,UpdateUserProfileSerializer,UserInfoSerializer,SimpleAuthorSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Blog
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
@@ -67,5 +68,34 @@ def delete_blog(request,pk):
   blog=get_object_or_404(Blog,id=pk,author=user)
   blog.delete()
   return Response({'message:blog deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_username(request):
+    user = request.user
+    username = user.username
+    return Response({"username": username})
+
+
+@api_view(['GET'])
+def get_userinfo(request, username):
+    User = get_user_model()
+    user = User.objects.get(username=username)
+    serializer = UserInfoSerializer(user)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_user(request, email):
+    User = get_user_model()
+    try:
+        existing_user = User.objects.get(email=email)
+        serializer = SimpleAuthorSerializer(existing_user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+    
 
 
