@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model=CustomUser
-        fields=['id','email','username','first_name','last_name','bio','profile_picture','facebook','youtube','instagram']
+        fields=['id','email','username', 'password','first_name','last_name','bio','profile_picture','facebook','youtube','instagram']
         extra_kwargs = {
             'password': {'write_only': True}  # don't return password in API responses
         }
@@ -21,7 +21,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UpdateUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=CustomUser
-        fields=['id','email','username','first_name','last_name','password']
+        fields = ["id", "email", "username", "first_name", "last_name", "bio", "profile_picture",
+                  "facebook", "youtube", "instagram", "twitter"]
     
 class SimpleAuthorSerializer(serializers.ModelSerializer):
     class Meta:
