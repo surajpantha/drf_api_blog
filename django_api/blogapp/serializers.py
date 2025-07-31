@@ -22,7 +22,7 @@ class UpdateUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model=CustomUser
         fields = ["id", "email", "username", "first_name", "last_name", "bio", "profile_picture",
-                  "facebook", "youtube", "instagram", "twitter"]
+                  "facebook", "youtube", "instagram"]
     
 class SimpleAuthorSerializer(serializers.ModelSerializer):
     class Meta:
